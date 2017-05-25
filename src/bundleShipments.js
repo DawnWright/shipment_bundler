@@ -41,13 +41,16 @@ const findMinBundleCombo = (shipments) => {
       const {bundle, remainingShipments: remaining} = bundlesStartingWithShipment[j]
       if (remaining.length === 0) {
         // One bundle! We can't get better than this, so return immediately.
-        return [bundle]
+        const newCombo = [bundle]
+        memoMinCombo[memoKey] = newCombo
+        return newCombo
       } else {
         const minComboForRemaining = findMinBundleCombo(remaining)
         if (minComboForRemaining) {
           const newCombo = [bundle, ...minComboForRemaining]
           if (lowerBound === newCombo.length) {
             // Already found the smallest bundle set, so quit early.
+            memoMinCombo[memoKey] = newCombo
             return newCombo
           } else if (!minCombo || minCombo.length > newCombo) {
             minCombo = newCombo
